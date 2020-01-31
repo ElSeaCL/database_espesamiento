@@ -21,3 +21,4 @@ Estos datos serán posteriormente utilizados en las distintas aplicaciones a des
 ## Ideas
 
 - Cada centrifuga tiene su origen de lodo, que tal si hago que cada centrifuga tenga su origen de polímero. Esta tabla tendría todas las opciones de alineación. y esta misma tabla debe conectar con los datos de preparación de polpimero para poder hacer el ajuste.
+- Realizar una tabla asociativa entre las unidades de polímero y las posibles alinaeciónes de centrífuga.
