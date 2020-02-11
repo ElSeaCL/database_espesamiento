@@ -41,6 +41,37 @@ def xl2npMatrix(hoja, minrow, maxrow, mincol, maxcol):
 
     return listo
 
+def splitnonalpha(s):
+   pos = 1
+   while pos < len(s) and s[pos].isalpha():
+      pos+=1
+   return (s[:pos], s[pos:])
+
+def matrix2excel(hoja, celda, matriz):
+    '''
+        Toma una matriz (numpy.matrix) y la inserta en la hoja seleccionada a
+        partir de la celda elegida.
+
+        :param hoja: Hoja donde se almacenaran los datos. Debe ser un Worksheet de openpyxl
+        :param celda: Celda donde se comenzará a almacenar lso datos. Esquina superior isquierda de la matriz
+        :param matriz: Matriz a grabar
+    '''
+
+    # Arreglo de la matríz
+    fil, col = matrix.shape
+    arreglo = matrix.reshape((fil*col, 1))
+
+    # Transformación de la celda, de formato escrito a numerico
+    celda_fila, celda_col = splitnonalpha(celda)
+
+    pos = 1
+    while pos < len(celda_fila):
+
+
+    for i in range(fil):
+        for j in range(col):
+
+
 ####################################################################################################################
 # MAIN
 ####################################################################################################################
@@ -88,4 +119,8 @@ arreglo = np.concatenate((lodos, polimeros, torque, vr), axis=1)
 ####################################################################################################################
 # ESCRITURA EXCEL
 ####################################################################################################################
+
+# Se escribe en la cenda correspondiente del excel db_espesamiento_prueba.xlsx hoja valor_centrifuga
+
+valores = excel_db["valor_centrifuga"]
 
