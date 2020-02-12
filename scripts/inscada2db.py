@@ -1,8 +1,13 @@
 import numpy as np
 from openpyxl import load_workbook
+from pathlib import Path, PureWindowsPath
 
-inscada = load_workbook(filename = r'T:\\BALANCE\\IN SCADA\\Inscada 2020.xlsm', data_only=True)
-excel_db = load_workbook(filename = r'T:\\PROCESOS\\18. Seguimientos\\Espesamiento\\db\\excel\\db_espesamiento_prueba.xlsx', data_only=True)
+# archivo donde se guardará
+excel_db_file = PureWindowsPath("T:/PROCESOS/18. Seguimientos/Espesamiento/db/excel/db_espesamiento_prueba.xlsx")
+inscada_file = PureWindowsPath("T:/BALANCE/IN SCADA/Inscada 2020.xlsm")
+
+inscada = load_workbook(filename = inscada_file, data_only=True) 
+excel_db = load_workbook(filename = excel_db_file, data_only=True)
 
 def array2list(array):
     '''
@@ -42,6 +47,10 @@ def xl2npMatrix(hoja, minrow, maxrow, mincol, maxcol):
     return listo
 
 def splitnonalpha(s):
+   '''
+        Toma como argumento una cadena y la separa en sus secciones alfabeticas.
+   ''' 
+
    pos = 1
    while pos < len(s) and s[pos].isalpha():
       pos+=1
@@ -58,19 +67,30 @@ def matrix2excel(hoja, celda, matriz):
     '''
 
     # Arreglo de la matríz
-    fil, col = matrix.shape
-    arreglo = matrix.reshape((fil*col, 1))
+    fila, col = matriz.shape
 
     # Transformación de la celda, de formato escrito a numerico
-    celda_fila, celda_col = splitnonalpha(celda)
+    celda_col, celda_fila = splitnonalpha(celda)
+    num_fila = int(celda_fila) 
 
+    # Se transforma la cadena alfabetica en un indicador numerico de la columna 
     pos = 1
-    while pos < len(celda_fila):
+    num_col = 0
+    while pos <= len(celda_col):
+        num_col += (ord(celda_col[-pos])-64)*pow(26,(pos-1))
+        pos += 1
 
+    # Alamacenamiento de los valores segun la hoja seleccionada y la celda de referencia
+    cont_col = 0
+    cont_fila = 0
+ 
+    for i in range(fila*col):
+        hoja.cell(num_fila + cont_fila, num_col + cont_col).value = matriz.item(i)
+        cont_col += 1
 
-    for i in range(fil):
-        for j in range(col):
-
+        if cont_col % col == 0:
+            cont_col = 0
+            cont_fila += 1
 
 ####################################################################################################################
 # MAIN
@@ -123,4 +143,8 @@ arreglo = np.concatenate((lodos, polimeros, torque, vr), axis=1)
 # Se escribe en la cenda correspondiente del excel db_espesamiento_prueba.xlsx hoja valor_centrifuga
 
 valores = excel_db["valor_centrifuga"]
+celda_rf = 'E2'
 
+matrix2excel(valores,celda_rf,arreglo)
+
+excel_db.save(filename = excel_db_file)
