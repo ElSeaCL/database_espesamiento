@@ -107,11 +107,13 @@ zeros = np.zeros((31,2), dtype='float')
 ## Matriz con los valores de lodo
 lodos = xl2npMatrix(espesamiento, 101, 131, 9, 16)
 
-## MAtriz con los valores de polimero
+## Matriz con los valores de polimero
 polimeros = xl2npMatrix(espesamiento, 101, 131, 23, 30)
 
 ## Matriz con los valores de torque
 torque = xl2npMatrix(espesamiento, 101, 131, 31, 36)
+
+# Limpieza de los string rescados en torque
 for i in range(31):
     for j in range(6):
         if torque[i,j][-1].isalpha() == True:
@@ -121,6 +123,8 @@ torque = np.concatenate((torque,zeros), axis=1)
 
 ## Matriz con los valores de vr
 vr = xl2npMatrix(espesamiento, 101, 131, 37, 42)
+
+# Limpieza de los string rescados en vr
 for i in range(31):
     for j in range(6):
         if vr[i,j][-1].isalpha() == True:
